@@ -1,43 +1,31 @@
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#begin()
-
-Plugin 'gmarik/vundle'
-Plugin 'tpope/vim-fugitive'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'majutsushi/tagbar'
-Plugin 'jlanzarotta/bufexplorer'
-Plugin 'kien/ctrlp.vim'
-Plugin 'Shougo/vimproc'
-Plugin 'Shougo/vimshell'
-Plugin 'Shougo/neocomplcache'
-Plugin 'myusuf3/numbers.vim'
-Plugin 'tpope/vim-surround'
-Plugin 'bling/vim-airline'
-" Swift?
-" Plugin 'fatih/vim-go'
-" Plugin 'klen/python-mode'
-" Plugin 'pangloss/vim-javascript'
-Plugin 'L9'
-
-call vundle#end()
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/seoul256.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'bling/vim-airline'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'd11wtq/ctrlp_bdelete.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'easymotion/vim-easymotion'
+Plug 'pangloss/vim-javascript'
+Plug 'maksimr/vim-jsbeautify'
+call plug#end()
 
 filetype on
 filetype plugin on
 filetype plugin indent on
+scriptencoding utf-8
 
 " Vim Settings
-" let g:impact_transbg=1
 set number
 set hls
 set ai
 set bsdir=buffer
 set tabstop=4
+set softtabstop=4
 set shiftwidth=4
 set smarttab
 set expandtab
@@ -58,120 +46,91 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set splitbelow
 set splitright
 set clipboard=unnamed
+set list
+set listchars=tab:•\ ,trail:•,extends:»,precedes:«
+set encoding=utf-8
+set autoindent
+set autoread
+set autochdir
 
 colorscheme molokai
 syntax on
 
+
 " Plugin Configuration
-
-" Airline
-let g:airline_theme = "serene"
-
-" vim-javascript
-let g:html_indent_inctags = "html,body,head,tbody"
-let g:html_indent_script1 = "inc"
-let g:html_indent_style1 = "inc"
-
-" Nerdcommenter
-let g:NERDSpaceDelims = 1
-
-" Nerdtree
-map <Leader>nt :NERDTreeToggle<CR>
-
-" Tagbar
-nmap <Leader>tt :TagbarToggle<CR>
-
-" easymotion
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-nmap s <Plug>(easymotion-sn)
-let g:EasyMotion_smartcase = 1
-map <Leader>l <Plug>(easymotion-lineforward)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-map <Leader>h <Plug>(easymotion-linebackward)
-
+ 
 " CtrlP
-let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_cmd = 'CtrlPMixed'
+" set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+" let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'file': '\v\.(exe|so|dll|~|pyc|class)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
+nnoremap <leader>be :CtrlPBuffer<CR>
+call ctrlp_bdelete#init()
+ 
+" NERDTree
+map <C-n> :NERDTreeToggle<CR>
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+let g:NERDTreeDirArrowExpandable="+"
+let g:NERDTreeDirArrowCollapsible="~"
+" let g:NERDTreeBookmarksFile='C:\Users\liy1lr\.NERDTreeBookmarks'
+let g:NERDTreeBookmarksFile=expand("$HOME/.vim/NERDTreeBookmarks")
+let g:NERDTreeHighlightCursorline = 1
+let g:NERDTreeShowBookmarks = 1
+let g:NERDTreeShowHidden = 1
 
-" VimShell
-let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
-let g:vimshell_prompt =  '$ '
-let g:vimshell_editor_command = '/Applications/MacVim.app/Contents/MacOS/Vim'
-let g:vimshell_max_command_history = 10000
-nnoremap <silent> S :<C-u>VimShellBufferDir -popup<CR>
+" NERD Commenter
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+" Add your own custom formats or override the defaults
+" let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
 
-" Numbers
-let g:numbers_exclude = ['tagbar', 'bufexplorer', 'vimshell', 'nerdtree']
+" Syntastic
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+" nnoremap <F8> :SyntasticCheck<CR>
 
-" Neocomplcache
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
-" Define file-type dependent dictionaries.
-" let g:neocomplcache_dictionary_filetype_lists = {
-"     \ 'default' : '',
-"     \ 'vimshell' : $HOME.'/.vimshell_hist',
-"     \ 'scheme' : $HOME.'/.gosh_completions'
-"     \ }
+" Flake8
+" let python_highlight_all=1
 
-" Define keyword, for minor languages
-if !exists('g:neocomplcache_keyword_patterns')
-    let g:neocomplcache_keyword_patterns = {}
-endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplcache#undo_completion()
-inoremap <expr><C-l>     neocomplcache#complete_common_string()
+" Easy motion
+let g:EasyMotion_smartcase = 1
+nmap s <Plug>(easymotion-sn)
 
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    return neocomplcache#smart_close_popup() . "\<CR>"
-    " For no inserting <CR> key.
-    "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplcache#close_popup()
-inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
-" Enable omni completion. Not required if they are already set elsewhere in
-" .vimrc
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+" VIM JS Beautify
+nnoremap <leader>jb :call JsBeautify()<CR>
+autocmd FileType javascript noremap <buffer> <leader>jb :call JsBeautify()<CR>
+autocmd FileType json noremap <buffer> <leader>jb :call JsonBeautify()<CR>
+autocmd FileType jsx noremap <buffer> <leader>jb :call JsxBeautify()<CR>
+autocmd FileType html noremap <buffer> <leader>jb :call HtmlBeautify()<CR>
+autocmd FileType css noremap <buffer> <leader>jb :call CSSBeautify()<CR>
+autocmd FileType javascript vnoremap <buffer> <leader>jb :call RangeJsBeautify()<CR>
+autocmd FileType json vnoremap <buffer> <leader>jb :call RangeJsonBeautify()<CR>
+autocmd FileType jsx vnoremap <buffer> <leader>jb :call RangeJsxBeautify()<CR>
+autocmd FileType html vnoremap <buffer> <leader>jb :call RangeHtmlBeautify()<CR>
+autocmd FileType css vnoremap <buffer> <leader>jb :call RangeCSSBeautify()<CR>
 
-" Enable heavy omni completion, which require computational power and may stall
-" the vim.
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
-" Key Mappings
-" Map function
-" nnoremap <silent> <F4> :BufExplorer<CR>
-" nnoremap <silent> <F5> :Tlist<CR>
-" nmap <silent> <F6> :NERDTreeToggle<CR>
-"
 " map to switch buf with control + hjkl
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-J> <C-W><C-J>
@@ -181,8 +140,10 @@ nnoremap <C-H> <C-W><C-H>
 " map to resize viewport
 map <S-l> 5<C-w>>
 map <S-h> 5<C-w><
-"map <S-j> 3<C-w>+
-"map <S-k> 3<C-w>-
 
-" Preserve indentation while pasting text from the OS X clipboard
-noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
+" map redraw
+map <F5> :redraw!<CR>
+
+" Flagging unnecessary whitespaces
+highlight BadWhitespace ctermbg=red guibg=darkred
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
