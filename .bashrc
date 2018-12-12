@@ -45,6 +45,7 @@ fi
 alias ll='ls -al'
 alias vi='/usr/local/bin/vi'
 alias vim='/usr/local/bin/vim'
+alias mongod='mongod --config /usr/local/etc/mongod.conf --fork'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -56,8 +57,3 @@ fi
 # Set vi as editor
 set -o vi
 export EDITOR=vim
-
-# Set Go Env
-export GOPATH=$HOME/Develop/go
-export GOBIN=$HOME/bin
-export PATH=$PATH:$HOME/bin

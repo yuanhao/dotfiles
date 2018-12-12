@@ -80,6 +80,9 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# alias mongod='mongod --config /usr/local/etc/mongod.conf --fork'
+alias mongod='mongod --fork --dbpath ~/data/mongodb --logpath ~/log/mongodb.log'
+
 bindkey -v 
 # vi style incremental search
 bindkey '^R' history-incremental-search-backward
