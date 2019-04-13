@@ -2,19 +2,20 @@ set nocompatible
 filetype off
 
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/seoul256.vim'
+Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-fugitive'
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'd11wtq/ctrlp_bdelete.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'ervandew/supertab'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/syntastic'
-Plug 'pangloss/vim-javascript'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'posva/vim-vue'
+" Plug 'scrooloose/syntastic'
+" Plug 'pangloss/vim-javascript'
+" Plug 'editorconfig/editorconfig-vim'
+" Plug 'posva/vim-vue'
 call plug#end()
 
 filetype on
@@ -57,14 +58,19 @@ set autoindent
 set autoread
 set autochdir
 
-colorscheme molokai
+colorscheme gruvbox
 syntax on
+
 
 "" Plugin Configuration
 
+" Airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='gruvbox'
+
 " CtrlP
 let g:ctrlp_cmd = 'CtrlPMixed'
-let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+let g:ctrlp_user_command = 'find %s -type f' " MacOSX/Linux
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](node_modules|target|dist)|(\.(git|hg|svn))$',
@@ -72,7 +78,7 @@ let g:ctrlp_custom_ignore = {
   \ 'link': 'some_bad_symbolic_links',
   \ }
 nnoremap <leader>be :CtrlPBuffer<CR>
-call ctrlp_bdelete#init()
+call ctrlp_bdelete#init()    "ctrl-@ delete buffer
 
 
 " NERDTree
@@ -95,43 +101,10 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 
 
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_mode_map = { 'mode': '', 'active_filetypes': [], 'passive_filetypes': ['javascript'] }
-nnoremap <F8> :SyntasticCheck<CR>
-
-" Syntastic local linter support
-let g:syntastic_javascript_checkers = []
-
-function CheckJavaScriptLinter(filepath, linter)
-    if exists('b:syntastic_checkers')
-        return
-    endif
-    if filereadable(a:filepath)
-        let b:syntastic_checkers = [a:linter]
-        let {'b:syntastic_' . a:linter . '_exec'} = a:filepath
-    endif
-endfunction
-
-function SetupJavaScriptLinter()
-    let l:current_folder = expand('%:p:h')
-    let l:bin_folder = fnamemodify(syntastic#util#findFileInParent('package.json', l:current_folder), ':h')
-    let l:bin_folder = l:bin_folder . '/node_modules/.bin/'
-    call CheckJavaScriptLinter(l:bin_folder . 'eslint', 'eslint')
-endfunction
-
-autocmd FileType javascript call SetupJavaScriptLinter()
-
-
 " Easy motion
 let g:EasyMotion_smartcase = 1
-nmap s <Plug>(easymotion-sn)
+map <Leader>/ <Plug>(easymotion-sn)
+let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
 
 "" Other configurations
